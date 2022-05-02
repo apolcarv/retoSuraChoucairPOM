@@ -1,0 +1,68 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.60")
+    }
+}
+
+ext {
+    serenityVersion = '2.0.64'
+    serenityCucumberVersion = '1.9.43'
+}
+test {
+    systemProperty "cucumber.options", System.getProperty("cucumber.options")
+}
+
+dependencies {
+
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    testImplementation "net.serenity-bdd:serenity-core:$rootProject.ext.serenityVersion"
+    testImplementation "net.serenity-bdd:serenity-junit:$rootProject.ext.serenityVersion"
+    testImplementation('junit:junit:4.12')
+    testImplementation('org.assertj:assertj-core:3.11.1')
+    testImplementation('org.slf4j:slf4j-simple:1.7.25')
+    implementation "net.serenity-bdd:serenity-core:$rootProject.ext.serenityVersion"
+    implementation "net.serenity-bdd:serenity-junit:$rootProject.ext.serenityVersion"
+    implementation "net.serenity-bdd:serenity-cucumber:$rootProject.ext.serenityCucumberVersion"
+    implementation "net.serenity-bdd:serenity-screenplay:$rootProject.ext.serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:$rootProject.ext.serenityVersion"
+    testImplementation group: 'org.testng', name: 'testng', version: '6.14.3'
+    implementation "net.serenity-bdd:serenity-screenplay-rest:${serenityVersion}"
+    implementation group: 'org.json', name: 'json', version: '20200518'
+    implementation group: 'dk.kewill.thirdpartymavencentral', name: 'jt400-full', version: '7.10'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
+    implementation group: 'org.jdbi', name: 'jdbi', version: '2.78'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+    implementation(group: 'com.github.javafaker', name: 'javafaker', version: '0.15')
+
+
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Test) {
+        systemProperty "file.encoding", "UTF-8"
+        maxParallelForks = 1
+        useJUnit()
+        include('**/TestRunnersRegistro*')
+
+        reports.junitXml.setEnabled(false)
+        reports.html.setEnabled(false)
+
+    }
+
+
+}
